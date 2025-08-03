@@ -30,6 +30,10 @@ sudo sed -i "s|ExecStart=/usr/bin/dockerd|ExecStart=/usr/bin/dockerd --registry-
 sudo systemctl daemon-reload
 sudo service docker restart   
 
+# 阿里云的容器仓库没有最新的node版本
+sed -i "s|ExecStart=/usr/bin/docker daemon|ExecStart=/usr/bin/docker daemon --registry-mirror=https://docker.xuanyuan.me/ |g" /etc/systemd/system/docker.service
+
+sed -i "s|ExecStart=/usr/bin/dockerd|ExecStart=/usr/bin/dockerd --registry-mirror=https://docker.xuanyuan.me/ |g" /etc/systemd/system/docker.service
 # 重载所有修改过的配置文件
 systemctl daemon-reload
 systemctl restart docker
