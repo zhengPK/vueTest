@@ -16,6 +16,7 @@ COPY . .
 # RUN npm run build
 
 # 暴露端口（如你的应用监听3000端口，可修改为实际端口）
-EXPOSE 3000
+EXPOSE 5173
 
 # 启动应用
+CMD ["npm", "run", "dev"]
