@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:24-alpine3.22
 
 # 设置工作目录
 WORKDIR /app

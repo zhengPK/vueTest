@@ -22,13 +22,20 @@ yum-config-manager \
    https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum install -y docker-ce docker-ce-cli containerd.io
 
-# 阿里云加速
-mkdir -p /etc/docker
-tee /etc/docker/daemon.json <<-'EOF'
-{
-    "repistry-mirrors":["https://fwvjnv59.mirror.aliyuncs.com"]
-}
-EOF
+
+# 使用这个 登录阿里云查看 https://help.aliyun.com/zh/acr/product-overview/product-change-acr-mirror-accelerator-function-adjustment-announcement
+sudo cp -n /lib/systemd/system/docker.service /etc/systemd/system/docker.service
+sudo sed -i "s|ExecStart=/usr/bin/docker daemon|ExecStart=/usr/bin/docker daemon --registry-mirror=https://2zuvq99n.mirror.aliyuncs.com |g" /etc/systemd/system/docker.service
+sudo sed -i "s|ExecStart=/usr/bin/dockerd|ExecStart=/usr/bin/dockerd --registry-mirror=https://2zuvq99n.mirror.aliyuncs.com|g" /etc/systemd/system/docker.service
+sudo systemctl daemon-reload
+sudo service docker restart   
+
 # 重载所有修改过的配置文件
 systemctl daemon-reload
 systemctl restart docker
+
+# 构建镜像:在项目根目录下打开终端，执行
+docker build -t vue-test .
+
+# 运行容器:将容器的 5173 端口映射到主机（假设你的前端 dev server 监听 5173）
+docker run -p 5173:5173 vue-test
